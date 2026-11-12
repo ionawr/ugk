@@ -1,4 +1,5 @@
 {
+  pkgs,
   system,
   inputs,
   ...
@@ -17,7 +18,13 @@
       # rust
       cargo-check.enable = true;
       cargo-sort.enable = true;
-      clippy.enable = true;
+      clippy = {
+        enable = true;
+        packageOverrides = {
+          inherit (pkgs) cargo clippy;
+        };
+        settings.allFeatures = true;
+      };
       rustfmt.enable = true;
 
       # git
@@ -25,6 +32,12 @@
 
       # secret detection
       ripsecrets.enable = true;
+    };
+
+    settings = {
+      rust.check.cargoDeps = pkgs.rustPlatform.importCargoLock {
+        lockFile = ../Cargo.lock;
+      };
     };
   };
 }

@@ -6,7 +6,7 @@
 }: let
   inherit (self.checks.${system}.pre-commit-check) shellHook enabledPackages;
 in {
-  default = pkgs.mkShellNoCC {
+  default = pkgs.mkShell {
     inherit shellHook;
 
     env.RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";

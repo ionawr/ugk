@@ -30,7 +30,7 @@
         inputs,
         system,
       }: {
-        checks = import ./nix/checks.nix {inherit system inputs;};
+        checks = import ./nix/checks.nix {inherit pkgs system inputs;};
         formatter = import ./nix/formatter.nix {inherit pkgs self system;};
         devShells = import ./nix/shell.nix {inherit pkgs self system;};
         packages = rec {
