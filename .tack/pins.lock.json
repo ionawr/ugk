@@ -1,0 +1,30 @@
+{
+  "$declared": {
+    "git-hooks": "github:cachix/git-hooks.nix",
+    "nixexprs": "git+https://codeberg.org/ionawr/nixexprs",
+    "nixpkgs": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst"
+  },
+  "git-hooks": {
+    "type": "github",
+    "owner": "cachix",
+    "repo": "git-hooks.nix",
+    "rev": "204b6977e00caac19e2313015a598543ca7be150",
+    "narHash": "sha256-Zb/0L3soxrkfcrywpfp0J++0WFLB3tzh0Xtx9up+VNc=",
+    "lastModified": 1793686154
+  },
+  "nixexprs": {
+    "type": "git",
+    "url": "https://codeberg.org/ionawr/nixexprs",
+    "ref": "HEAD",
+    "rev": "d73e26cd177e8868d92c8079291eeebd32846e2b",
+    "narHash": "sha256-0jFlzN8Qz29zG+o5TjL+cwfWdHByK2Ihdp6jtElv338=",
+    "lastModified": 1794200874
+  },
+  "nixpkgs": {
+    "type": "tarball",
+    "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1114946.177d0540942f/nixexprs.tar.zst?rev=177d0540942fb205af6993b1d5fa0b57799e09f8&lastModified=1794192123",
+    "rev": "177d0540942fb205af6993b1d5fa0b57799e09f8",
+    "narHash": "sha256-YOhabADcIwaWo9992egosQF3iVpvWysmZAyhbGBzinY=",
+    "lastModified": 1794192123
+  }
+}
