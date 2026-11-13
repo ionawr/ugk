@@ -18,7 +18,7 @@ pub enum Commands {
 pub struct AddArgs {
     #[arg(short, long)]
     pub recipient: String,
-    #[arg(short, long)]
+    #[arg(short, long, env = "UGK_SECRETFILE_PATH")]
     pub secretfile: String,
     #[arg(short, long)]
     pub keyring_name: String,
@@ -26,8 +26,6 @@ pub struct AddArgs {
 
 #[derive(Args, Debug)]
 pub struct InitArgs {
-    #[arg(short, long)]
-    pub recipient: String,
     #[arg(short, long, env = "UGK_SECRETFILE_PATH")]
     pub secretfile: String,
 }
