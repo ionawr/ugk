@@ -1,12 +1,12 @@
-use anyhow::Result;
+use anyhow::{Context, Result, bail};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::fs::File;
+use std::fs::{File, create_dir_all};
 use std::io::Write;
 use std::path::Path;
 use std::process::{Command, Stdio};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct KeyringCredentials(HashMap<String, String>);
 
 impl KeyringCredentials {
@@ -14,7 +14,8 @@ impl KeyringCredentials {
         Self(HashMap::new())
     }
 
-    pub fn load(secretfile: &Path) -> Result<Self> {
+    pub fn load(secretfile: impl AsRef<Path>) -> Result<Self> {
+        let secretfile = secretfile.as_ref();
         let output = Command::new("gpg")
             .arg("--decrypt")
             .arg(secretfile.as_os_str())
@@ -24,8 +25,9 @@ impl KeyringCredentials {
         Ok(toml::from_str::<KeyringCredentials>(&decrypted)?)
     }
 
-    pub fn save(&self, secretfile: &Path, recipient: &str) -> Result<()> {
+    pub fn save(&self, secretfile: impl AsRef<Path>, recipient: &str) -> Result<()> {
         let toml = toml::to_string(&self)?;
+        let secretfile = secretfile.as_ref();
         let mut child = Command::new("gpg")
             .arg("--encrypt")
             .arg("-o")
@@ -33,6 +35,7 @@ impl KeyringCredentials {
             .arg("-a")
             .arg("-r")
             .arg(recipient)
+            .arg("--yes")
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
@@ -49,12 +52,24 @@ impl KeyringCredentials {
         Ok(())
     }
 
-    pub fn add(&mut self, keyring: String, password: String) -> Result<()> {
-        self.0.insert(keyring, password);
+    pub fn init(&mut self, secretfile: impl AsRef<Path>) -> Result<File> {
+        let secretfile = secretfile.as_ref();
+        if let Some(parent) = secretfile.parent() {
+            create_dir_all(parent)?;
+            File::create_new(secretfile).map_err(anyhow::Error::from)
+        } else {
+            bail!("given path is incorrect");
+        }
+    }
+
+    pub fn add(&mut self, keyring: &str, password: &str) -> Result<()> {
+        self.0.insert(String::from(keyring), String::from(password));
         Ok(())
     }
 
-    pub fn init(&mut self, secretfile: &Path) -> Result<File> {
-        File::create_new(secretfile).map_err(anyhow::Error::from)
+    pub fn remove(&mut self, keyring: &str) -> Result<String> {
+        self.0
+            .remove(keyring)
+            .with_context(|| format!("no keyring found with the name {keyring}"))
     }
 }
