@@ -14,14 +14,25 @@ secretfile path configuration precendence:
 - `$XDG_CONFIG_HOME/ugk/secret.toml`
 - `$HOME/.config/ugk/secret.toml`
 
-to initialise the secretfile: `ugk init`
+to initialise the secretfile:
+
+```bash
+ugk init
+```
 
 to add a new keyring - password pair:
-`ugk add -r <RECIPIENT> -k <KEYRING_NAME>` you will be prompted to enter your
-password
+
+```bash
+ugk add -r <RECIPIENT> -k <KEYRING_NAME>
+```
+
+you will be prompted to enter your password
 
 to remove a registerd keyring - password pair:
-`ugk rm -r <RECIPIENT> -k <KEYRING_NAME>`
+
+```bash
+ugk rm -r <RECIPIENT> -k <KEYRING_NAME>
+```
 
 TODO: actually using ugk to unlock the keyrings
 
